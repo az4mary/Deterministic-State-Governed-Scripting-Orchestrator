@@ -1128,10 +1128,10 @@ RATIONALE (ENFORCED)
     - system fragility
 
 ---
-## EDGE_CASES_RULES
-```
-EDGE CASE IDENTIFICATION (SYSTEMATIC)
 
+## EDGE_CASES_RULES
+
+EDGE CASE IDENTIFICATION (SYSTEMATIC)
 - Edge cases MUST be explicitly defined as **boundary or abnormal conditions** that can cause unexpected behavior or failure
 - REQUIRED detection categories:
     - malformed or invalid input
@@ -1146,21 +1146,19 @@ EDGE CASE IDENTIFICATION (SYSTEMATIC)
 
 EDGE CASE CONTRACT (MANDATORY DEFINITION)
 Each edge case MUST be defined using a structured specification:
-
-	```json
-	{  
-	  "edge_case_id": "...",  
-	  "trigger_condition": "...",  
-	  "stage": "INGESTION|VALIDATION|TRANSFORMATION|OUTPUT",  
-	  "expected_state": "...",  
-	  "failure_response": {  
-	    "error_code": "...",  
-	    "message": "...",  
-	    "termination": true  
-	  }  
-	}
-	```
-
+```json
+{  
+  "edge_case_id": "...",  
+  "trigger_condition": "...",  
+  "stage": "INGESTION|VALIDATION|TRANSFORMATION|OUTPUT",  
+  "expected_state": "...",  
+  "failure_response": {  
+	"error_code": "...",  
+	"message": "...",  
+	"termination": true  
+  }  
+}
+```
 - Undefined triggers or outcomes → **INVALID (HALT)**
 
 FAILURE HANDLING (FAIL-FAST ENFORCEMENT)
@@ -1214,13 +1212,12 @@ RATIONALE (ENFORCED)
     - predictable failure behavior
     - easier debugging and validation
 Proper edge case handling ensures software behaves reliably under unusual or extreme conditions
-```
 
 ---
-## TEST_SCENARIO_DESIGN_TDD_RULES
-```
-TEST DESIGN MODEL (TDD + EXECUTABLE OUTPUT)
 
+## TEST_SCENARIO_DESIGN_TDD_RULES
+
+TEST DESIGN MODEL (TDD + EXECUTABLE OUTPUT)
 - Tests MUST be produced as **execution-ready artifacts**, not descriptive scenarios
 - Output MUST conform to a **standardized test case schema** (repository-compatible)
 Modern test cases must include steps, inputs, and expected results to be executable and reusable
@@ -1246,54 +1243,52 @@ Define complete test coverage across:
 
 OUTPUT CONTRACT (MANDATORY — DIRECT STORAGE FORMAT)
 Each test MUST follow:
-
 ```json
-	{  
-	  "test_id": "...",  
-	  "name": "...",  
-	  "category": "VALID|INVALID|EDGE",  
-	  "objective": "...",  
-	  
-	  "preconditions": {  
-	    "environment": "...",  
-	    "dependencies": []  
-	  },  
-	  
-	  "input": {  
-	    "data": "...",  
-	    "schema_version": "..."  
-	  },  
-	  
-	  "steps": [  
-	    "explicit step 1",  
-	    "explicit step 2"  
-	  ],  
-	  
-	  "expected_result": {  
-	    "type": "SUCCESS|ERROR",  
-	    "output": "...",  
-	    "error_code": "..."  
-	  },  
-	  
-	  "assertions": [  
-	    "exact validation rule"  
-	  ],  
-	  
-	  "traceability": {  
-	    "script_id": "...",  
-	    "algorithm_step": "...",  
-	    "edge_case_id": "..."  
-	  },  
-	  
-	  "execution": {  
-	    "status": "PENDING",  
-	    "actual_result": null  
-	  },  
-	  
-	  "version": "..."  
-	}
-	```
-
+{  
+  "test_id": "...",  
+  "name": "...",  
+  "category": "VALID|INVALID|EDGE",  
+  "objective": "...",  
+  
+  "preconditions": {  
+	"environment": "...",  
+	"dependencies": []  
+  },  
+  
+  "input": {  
+	"data": "...",  
+	"schema_version": "..."  
+  },  
+  
+  "steps": [  
+	"explicit step 1",  
+	"explicit step 2"  
+  ],  
+  
+  "expected_result": {  
+	"type": "SUCCESS|ERROR",  
+	"output": "...",  
+	"error_code": "..."  
+  },  
+  
+  "assertions": [  
+	"exact validation rule"  
+  ],  
+  
+  "traceability": {  
+	"script_id": "...",  
+	"algorithm_step": "...",  
+	"edge_case_id": "..."  
+  },  
+  
+  "execution": {  
+	"status": "PENDING",  
+	"actual_result": null  
+  },  
+  
+  "version": "..."  
+}
+```
 - Tests must be:
     - machine-readable
     - isolated (no dependency on other tests)
@@ -1356,235 +1351,233 @@ RATIONALE (ENFORCED)
     - enforce behavioral correctness      
 
 **RECORDED TEST CASES**
+```json
+{
+"test_id": "T1",
+"name": "Successful foreground-browser submission",
+"category": "VALID",
+"objective": "Validate end-to-end success for submitting the exact prompt through a focused browser window.",
+"preconditions": {
+  "environment": "Windows 11, browser focused",
+  "dependencies": ["pyautogui", "pyperclip", "ctypes"]
+},
+"input": {
+  "data": "target_url + exact message",
+  "schema_version": "1.0"
+},
+"steps": [
+  "validate foreground browser",
+  "navigate URL",
+  "paste exact message",
+  "submit"
+],
+"expected_result": {
+  "type": "SUCCESS",
+  "output": "message submitted",
+  "error_code": null
+},
+"assertions": [
+  "foreground window is browser",
+  "submitted text matches exact prompt"
+],
+"traceability": {
+  "script_id": "chatgpt_tab_submit_v1",
+  "algorithm_step": "submit_message",
+  "edge_case_id": null
+},
+"execution": {
+  "status": "PENDING",
+  "actual_result": null
+},
+"version": "1.0"
+},
+{
+"test_id": "T2",
+"name": "Reject non-browser focus",
+"category": "INVALID",
+"objective": "Block execution when the foreground application is not a browser.",
+"preconditions": {
+  "environment": "Windows 11, non-browser focused",
+  "dependencies": ["ctypes"]
+},
+"input": {
+  "data": "require_foreground_browser=true",
+  "schema_version": "1.0"
+},
+"steps": [
+  "validate foreground browser"
+],
+"expected_result": {
+  "type": "ERROR",
+  "output": null,
+  "error_code": "ERR_NO_BROWSER_FOCUS"
+},
+"assertions": [
+  "execution halts before navigation"
+],
+"traceability": {
+  "script_id": "chatgpt_tab_submit_v1",
+  "algorithm_step": "validate_foreground_browser",
+  "edge_case_id": "EC_001"
+},
+"execution": {
+  "status": "PENDING",
+  "actual_result": null
+},
+"version": "1.0"
+},
+{
+"test_id": "T3",
+"name": "Reject NULL foreground handle",
+"category": "EDGE",
+"objective": "Fail fast when the active window handle is null.",
+"preconditions": {
+  "environment": "Windows 11",
+  "dependencies": ["ctypes"]
+},
+"input": {
+  "data": "GetForegroundWindow() returns NULL",
+  "schema_version": "1.0"
+},
+"steps": [
+  "validate foreground browser"
+],
+"expected_result": {
+  "type": "ERROR",
+  "output": null,
+  "error_code": "ERR_NO_BROWSER_FOCUS"
+},
+"assertions": [
+  "null handle terminates immediately"
+],
+"traceability": {
+  "script_id": "chatgpt_tab_submit_v1",
+  "algorithm_step": "validate_foreground_browser",
+  "edge_case_id": "EC_001"
+},
+"execution": {
+  "status": "PENDING",
+  "actual_result": null
+},
+"version": "1.0"
+}
 
-[
-  {
-    "test_id": "T1",
-    "name": "Successful foreground-browser submission",
-    "category": "VALID",
-    "objective": "Validate end-to-end success for submitting the exact prompt through a focused browser window.",
-    "preconditions": {
-      "environment": "Windows 11, browser focused",
-      "dependencies": ["pyautogui", "pyperclip", "ctypes"]
-    },
-    "input": {
-      "data": "target_url + exact message",
-      "schema_version": "1.0"
-    },
-    "steps": [
-      "validate foreground browser",
-      "navigate URL",
-      "paste exact message",
-      "submit"
-    ],
-    "expected_result": {
-      "type": "SUCCESS",
-      "output": "message submitted",
-      "error_code": null
-    },
-    "assertions": [
-      "foreground window is browser",
-      "submitted text matches exact prompt"
-    ],
-    "traceability": {
-      "script_id": "chatgpt_tab_submit_v1",
-      "algorithm_step": "submit_message",
-      "edge_case_id": null
-    },
-    "execution": {
-      "status": "PENDING",
-      "actual_result": null
-    },
-    "version": "1.0"
-  },
-  {
-    "test_id": "T2",
-    "name": "Reject non-browser focus",
-    "category": "INVALID",
-    "objective": "Block execution when the foreground application is not a browser.",
-    "preconditions": {
-      "environment": "Windows 11, non-browser focused",
-      "dependencies": ["ctypes"]
-    },
-    "input": {
-      "data": "require_foreground_browser=true",
-      "schema_version": "1.0"
-    },
-    "steps": [
-      "validate foreground browser"
-    ],
-    "expected_result": {
-      "type": "ERROR",
-      "output": null,
-      "error_code": "ERR_NO_BROWSER_FOCUS"
-    },
-    "assertions": [
-      "execution halts before navigation"
-    ],
-    "traceability": {
-      "script_id": "chatgpt_tab_submit_v1",
-      "algorithm_step": "validate_foreground_browser",
-      "edge_case_id": "EC_001"
-    },
-    "execution": {
-      "status": "PENDING",
-      "actual_result": null
-    },
-    "version": "1.0"
-  },
-  {
-    "test_id": "T3",
-    "name": "Reject NULL foreground handle",
-    "category": "EDGE",
-    "objective": "Fail fast when the active window handle is null.",
-    "preconditions": {
-      "environment": "Windows 11",
-      "dependencies": ["ctypes"]
-    },
-    "input": {
-      "data": "GetForegroundWindow() returns NULL",
-      "schema_version": "1.0"
-    },
-    "steps": [
-      "validate foreground browser"
-    ],
-    "expected_result": {
-      "type": "ERROR",
-      "output": null,
-      "error_code": "ERR_NO_BROWSER_FOCUS"
-    },
-    "assertions": [
-      "null handle terminates immediately"
-    ],
-    "traceability": {
-      "script_id": "chatgpt_tab_submit_v1",
-      "algorithm_step": "validate_foreground_browser",
-      "edge_case_id": "EC_001"
-    },
-    "execution": {
-      "status": "PENDING",
-      "actual_result": null
-    },
-    "version": "1.0"
-  }
+```
 
----
-
-  {
-    "test_id": "T1",
-    "name": "Valid raw inputs produce schema-compliant workflow state",
-    "category": "VALID",
-    "objective": "Validate that clean source images and unstructured product text are transformed into a complete workflow_state.json.",
-    "preconditions": {
-      "environment": "Windows 11, local filesystem available",
-      "dependencies": ["python", "json schema validator"]
-    },
-    "input": {
-      "data": "valid product images + valid unstructured product data",
-      "schema_version": "1.0"
-    },
-    "steps": [
-      "load source artifacts",
-      "run PROMPT 1A",
-      "run PROMPT 1B",
-      "merge outputs into workflow_state.json"
-    ],
-    "expected_result": {
-      "type": "SUCCESS",
-      "output": "schema-compliant workflow_state.json",
-      "error_code": null
-    },
-    "assertions": [
-      "required core fields exist",
-      "visual grounding fields exist",
-      "JSON is valid and parseable"
-    ],
-    "traceability": {
-      "script_id": "workflow_orchestrator_v1",
-      "algorithm_step": "S1-S4",
-      "edge_case_id": null
-    },
-    "execution": {
-      "status": "PENDING",
-      "actual_result": null
-    },
-    "version": "1.0"
-  },
-  {
-    "test_id": "T2",
-    "name": "Missing image input fails ingestion",
-    "category": "INVALID",
-    "objective": "Validate that the pipeline halts when no source images are provided.",
-    "preconditions": {
-      "environment": "Windows 11, local filesystem available",
-      "dependencies": ["python"]
-    },
-    "input": {
-      "data": "unstructured text only, no product images",
-      "schema_version": "1.0"
-    },
-    "steps": [
-      "load source artifacts",
-      "validate image presence"
-    ],
-    "expected_result": {
-      "type": "ERROR",
-      "output": null,
-      "error_code": "INGESTION_MISSING_IMAGES"
-    },
-    "assertions": [
-      "pipeline halts before PROMPT 1B",
-      "no workflow_state.json is saved"
-    ],
-    "traceability": {
-      "script_id": "workflow_orchestrator_v1",
-      "algorithm_step": "S1",
-      "edge_case_id": "EC_002"
-    },
-    "execution": {
-      "status": "PENDING",
-      "actual_result": null
-    },
-    "version": "1.0"
-  },
-  {
-    "test_id": "T3",
-    "name": "Schema drift in extracted JSON fails validation",
-    "category": "EDGE",
-    "objective": "Validate that unexpected or missing fields in PROMPT 1 output halt the pipeline immediately.",
-    "preconditions": {
-      "environment": "Windows 11, local filesystem available",
-      "dependencies": ["python", "json schema validator"]
-    },
-    "input": {
-      "data": "PROMPT 1A output with extra or missing required keys",
-      "schema_version": "1.0"
-    },
-    "steps": [
-      "run PROMPT 1A",
-      "validate JSON against schema"
-    ],
-    "expected_result": {
-      "type": "ERROR",
-      "output": null,
-      "error_code": "VALIDATION_SCHEMA_DRIFT"
-    },
-    "assertions": [
-      "validation fails before downstream prompts",
-      "no invalid state is persisted"
-    ],
-    "traceability": {
-      "script_id": "workflow_orchestrator_v1",
-      "algorithm_step": "S2",
-      "edge_case_id": "EC_003"
-    },
-    "execution": {
-      "status": "PENDING",
-      "actual_result": null
-    },
-    "version": "1.0"
-  }
-]
+{
+"test_id": "T1",
+"name": "Valid raw inputs produce schema-compliant workflow state",
+"category": "VALID",
+"objective": "Validate that clean source images and unstructured product text are transformed into a complete workflow_state.json.",
+"preconditions": {
+  "environment": "Windows 11, local filesystem available",
+  "dependencies": ["python", "json schema validator"]
+},
+"input": {
+  "data": "valid product images + valid unstructured product data",
+  "schema_version": "1.0"
+},
+"steps": [
+  "load source artifacts",
+  "run PROMPT 1A",
+  "run PROMPT 1B",
+  "merge outputs into workflow_state.json"
+],
+"expected_result": {
+  "type": "SUCCESS",
+  "output": "schema-compliant workflow_state.json",
+  "error_code": null
+},
+"assertions": [
+  "required core fields exist",
+  "visual grounding fields exist",
+  "JSON is valid and parseable"
+],
+"traceability": {
+  "script_id": "workflow_orchestrator_v1",
+  "algorithm_step": "S1-S4",
+  "edge_case_id": null
+},
+"execution": {
+  "status": "PENDING",
+  "actual_result": null
+},
+"version": "1.0"
+},
+{
+"test_id": "T2",
+"name": "Missing image input fails ingestion",
+"category": "INVALID",
+"objective": "Validate that the pipeline halts when no source images are provided.",
+"preconditions": {
+  "environment": "Windows 11, local filesystem available",
+  "dependencies": ["python"]
+},
+"input": {
+  "data": "unstructured text only, no product images",
+  "schema_version": "1.0"
+},
+"steps": [
+  "load source artifacts",
+  "validate image presence"
+],
+"expected_result": {
+  "type": "ERROR",
+  "output": null,
+  "error_code": "INGESTION_MISSING_IMAGES"
+},
+"assertions": [
+  "pipeline halts before PROMPT 1B",
+  "no workflow_state.json is saved"
+],
+"traceability": {
+  "script_id": "workflow_orchestrator_v1",
+  "algorithm_step": "S1",
+  "edge_case_id": "EC_002"
+},
+"execution": {
+  "status": "PENDING",
+  "actual_result": null
+},
+"version": "1.0"
+},
+{
+"test_id": "T3",
+"name": "Schema drift in extracted JSON fails validation",
+"category": "EDGE",
+"objective": "Validate that unexpected or missing fields in PROMPT 1 output halt the pipeline immediately.",
+"preconditions": {
+  "environment": "Windows 11, local filesystem available",
+  "dependencies": ["python", "json schema validator"]
+},
+"input": {
+  "data": "PROMPT 1A output with extra or missing required keys",
+  "schema_version": "1.0"
+},
+"steps": [
+  "run PROMPT 1A",
+  "validate JSON against schema"
+],
+"expected_result": {
+  "type": "ERROR",
+  "output": null,
+  "error_code": "VALIDATION_SCHEMA_DRIFT"
+},
+"assertions": [
+  "validation fails before downstream prompts",
+  "no invalid state is persisted"
+],
+"traceability": {
+  "script_id": "workflow_orchestrator_v1",
+  "algorithm_step": "S2",
+  "edge_case_id": "EC_003"
+},
+"execution": {
+  "status": "PENDING",
+  "actual_result": null
+},
+"version": "1.0"
+}
 ```
 
 ---
