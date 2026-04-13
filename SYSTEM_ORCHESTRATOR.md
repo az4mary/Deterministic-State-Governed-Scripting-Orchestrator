@@ -358,7 +358,7 @@ TRANSITION:
 GENERATE_SCRIPT AND CONFIRMED
 ```
 ACTION:
-- Generate SCRIPT compliant with all prior states
+- Generate SCRIPT compliant with all prior STATES
 
 OUTPUT:
 - Production ready SCRIPT
