@@ -608,7 +608,7 @@ END
 
 ---
 ## SCRIPT_OBJECTIVE_RULES
-```
+
 OBJECTIVE DEFINITION PROTOCOL (MANDATORY)
 
 1. **Clarity Gate**
@@ -634,16 +634,15 @@ High-quality requirements must be unambiguous, complete, and verifiable
 
 OBJECTIVE STRUCTURE (STANDARDIZED)
 Each objective MUST resolve into:
-
-	```json
-	{  
-	  "objective": "...",  
-	  "script_category": "PARSER|SCRAPER|PROCESSOR",  
-	  "pipeline_stage": "INGESTION|EXTRACTION|TRANSFORMATION|OUTPUT",  
-	  "success_criteria": "...",  
-	  "constraints": []  
-	}
-	```
+```json
+{  
+  "objective": "...",  
+  "script_category": "PARSER|SCRAPER|PROCESSOR",  
+  "pipeline_stage": "INGESTION|EXTRACTION|TRANSFORMATION|OUTPUT",  
+  "success_criteria": "...",  
+  "constraints": []  
+}
+```
 
 - `success_criteria` must be measurable (no vague terms like “fast” or “correct”)
 - Avoid subjective language
@@ -678,7 +677,6 @@ RATIONALE (ENFORCED)
     - traceability across systems
     - reduced ambiguity and rework
 Well-defined requirements significantly improve project success and alignment
-```
 
 ---
 ## REUSABLE_PATTERNS
