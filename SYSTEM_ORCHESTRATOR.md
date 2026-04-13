@@ -933,28 +933,26 @@ Structured observability and logging systems depend on accurate, queryable exter
 ---
 
 ## INPUT_OUTPUT_RULES
-```
+
 INPUT/OUTPUT CONTRACT (MANDATORY)
-
 Each script MUST define a **formal data contract**:
-	```json
-	{  
-	  "input": {  
-	    "format": "...",  
-	    "schema": "...",  
-	    "source": "...",  
-	    "path": "..."  
-	  },  
-	  "output": {  
-	    "format": "...",  
-	    "schema": "...",  
-	    "destination": "...",  
-	    "path": "..."  
-	  },  
-	  "version": "..."  
-	}
-	```
-
+```json
+{  
+  "input": {  
+	"format": "...",  
+	"schema": "...",  
+	"source": "...",  
+	"path": "..."  
+  },  
+  "output": {  
+	"format": "...",  
+	"schema": "...",  
+	"destination": "...",  
+	"path": "..."  
+  },  
+  "version": "..."  
+}
+```
 - Contracts must be **machine-readable, versioned, and enforceable**
 - No implicit or undocumented inputs/outputs
 Data contracts define schema, semantics, and validation rules to ensure reliable data exchange
@@ -990,11 +988,9 @@ FILESYSTEM & DATA BOUNDARIES
     - read/write boundaries per script
     - no cross-stage or unauthorized access
 - Data flow must remain:
-
-	```
-	input → process → output
-	```
-
+```
+input → process → output
+```
 DATA INTEGRITY CONTROLS
 - Validate before execution:
     - expected data presence (non-empty, required partitions)
@@ -1007,11 +1003,9 @@ Strong validation and governance are required to ensure trustworthy pipelines
 
 TRACEABILITY & LINEAGE (DATA-LEVEL)
 - Maintain explicit mapping:
-
-	```
-	input source → transformation → output artifact
-	```
-
+```
+input source → transformation → output artifact
+```
 - Must support:
     - reproducibility (same input + schema → same output)
     - lineage tracking across pipeline stages
@@ -1037,13 +1031,12 @@ RATIONALE (ENFORCED)
     - downstream failures
     - schema incompatibility
 Schema enforcement and contracts are foundational to scalable, trustworthy data systems
-```
 
 ---
-## ALGORITHM_RULES
-```
-ALGORITHM CONTRACT (DETERMINISTIC, EXPLICIT)
 
+## ALGORITHM_RULES
+
+ALGORITHM CONTRACT (DETERMINISTIC, EXPLICIT)
 - Algorithms MUST be defined as **fully explicit, ordered state transitions**
 - Each step must:
     - have defined inputs
@@ -1054,21 +1047,19 @@ Deterministic algorithms guarantee identical outputs and state transitions for i
 
 STEP DEFINITION (MANDATORY)
 Each algorithm MUST be expressed as:
-
-	```json
+```json
+{  
+  "steps": [  
 	{  
-	  "steps": [  
-	    {  
-	      "step_id": "...",  
-	      "input": "...",  
-	      "operation": "...",  
-	      "output": "...",  
-	      "next_step": "..."  
-	    }  
-	  ]  
-	}
-	```
-
+	  "step_id": "...",  
+	  "input": "...",  
+	  "operation": "...",  
+	  "output": "...",  
+	  "next_step": "..."  
+	}  
+  ]  
+}
+```
 - Steps must form a **complete, closed sequence**
 - Undefined or ambiguous steps → **HALT**
 
@@ -1135,7 +1126,6 @@ RATIONALE (ENFORCED)
     - ambiguity
     - hidden failure modes
     - system fragility
-```
 
 ---
 ## EDGE_CASES_RULES
