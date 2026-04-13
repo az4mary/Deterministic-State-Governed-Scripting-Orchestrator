@@ -1950,7 +1950,6 @@ RATIONALE (ENFORCED)
 ## KB_UPDATE_RULES
 
 UPDATE MODEL (IMMUTABLE, APPEND-ONLY)
-
 - Knowledge Base (KB) MUST operate as an **append-only, immutable log**
 - Existing entries are **never modified or deleted**
 - All changes are recorded as **new versioned entries**
@@ -2070,10 +2069,10 @@ Immutable event histories enable debugging, replay, and full system understandin
 ```
 
 ---
-## STATIC_CODE_ANALYSIS_RULES
-```
-STATIC ANALYSIS CONTRACT (PRE-EXECUTION, NON-RUNTIME)
 
+## STATIC_CODE_ANALYSIS_RULES
+
+STATIC ANALYSIS CONTRACT (PRE-EXECUTION, NON-RUNTIME)
 - Static analysis MUST be executed **before any runtime or test execution**
 - Analysis MUST inspect source code **without execution**
 Static code analysis scans code “without actually executing the code” to detect issues early
@@ -2154,15 +2153,13 @@ RATIONALE (ENFORCED)
     - propagation of defects into runtime
     - accumulation of technical debt
 Early detection improves maintainability, security, and developer productivity
-```
 
 ---
+
 ## CODE_REVIEW_RULES
-```
+
 CODE REVIEW PROTOCOL:
-
 VALIDATE:
-
 1. functional correctness (bugs)
 2. edge case coverage
 3. compliance with system rules (determinism, fail-fast, I/O contracts)
