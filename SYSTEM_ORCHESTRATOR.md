@@ -680,9 +680,8 @@ Well-defined requirements significantly improve project success and alignment
 
 ---
 ## REUSABLE_PATTERNS
-```
-PATTERN RESOLUTION PROTOCOL:
 
+PATTERN RESOLUTION PROTOCOL:
 1. LOAD patterns from **centralized pattern registry (authoritative source only)**
 2. IF exact match exists → USE **without modification**
 3. IF no match:
@@ -694,22 +693,20 @@ Design patterns are “reusable solutions to recurring problems” and must not 
 PATTERN REGISTRY CONTRACT
 - All patterns MUST be stored in a **central, versioned registry**
 - Each pattern must define:
-
-	```json
-	{
-	  "pattern_id": "...",
-	  "name": "...",
-	  "version": "...",
-	  "category": "VALIDATION|LOGGING|TRANSFORMATION|CONTROL_FLOW",
-	  "input_schema": "...",
-	  "output_schema": "...",
-	  "invariants": ["..."],
-	  "usage_example": "...",
-	  "dependencies": [],
-	  "deterministic": true
-	}
-	```
-
+```json
+{
+  "pattern_id": "...",
+  "name": "...",
+  "version": "...",
+  "category": "VALIDATION|LOGGING|TRANSFORMATION|CONTROL_FLOW",
+  "input_schema": "...",
+  "output_schema": "...",
+  "invariants": ["..."],
+  "usage_example": "...",
+  "dependencies": [],
+  "deterministic": true
+}
+```
 - Patterns are **immutable once published** (new version required for changes)
 
 DESIGN CONSTRAINTS
@@ -780,62 +777,61 @@ RATIONALE (ENFORCED)
 
 **RECORDED REUSABLE_PATTERNS (SCHEMA-COMPLIANT):**
 
-	```json
-	{  
-	  "pattern_id": "PATTERN_001",  
-	  "name": "FSM_Paired_Block_Extractor",  
-	  "version": "1.0",  
-	  "category": "CONTROL_FLOW",  
-	  "input_schema": "# TITLE followed by **TASK:**",  
-	  "output_schema": "paired TITLE-TASK blocks",  
-	  "invariants": [  
-	    "each TITLE must have exactly one TASK",  
-	    "state transitions must be deterministic",  
-	    "fail on invalid sequence"  
-	  ],  
-	  "usage_example": "markdown parsing for structured extraction",  
-	  "dependencies": [],  
-	  "deterministic": true  
-	}
-	```
+```json
+{  
+  "pattern_id": "PATTERN_001",  
+  "name": "FSM_Paired_Block_Extractor",  
+  "version": "1.0",  
+  "category": "CONTROL_FLOW",  
+  "input_schema": "# TITLE followed by **TASK:**",  
+  "output_schema": "paired TITLE-TASK blocks",  
+  "invariants": [  
+	"each TITLE must have exactly one TASK",  
+	"state transitions must be deterministic",  
+	"fail on invalid sequence"  
+  ],  
+  "usage_example": "markdown parsing for structured extraction",  
+  "dependencies": [],  
+  "deterministic": true  
+}
+```
 
-	```json	
-	{  
-	  "pattern_id": "PATTERN_002",  
-	  "name": "Structured_JSON_Logging",  
-	  "version": "1.0",  
-	  "category": "LOGGING",  
-	  "input_schema": "execution events",  
-	  "output_schema": "JSON logs with trace_id and span_id",  
-	  "invariants": [  
-	    "schema consistency across all logs",  
-	    "mandatory fields present",  
-	    "single terminal event"  
-	  ],  
-	  "usage_example": "pipeline observability and debugging",  
-	  "dependencies": [],  
-	  "deterministic": true  
-	}
-	```
+```json	
+{  
+  "pattern_id": "PATTERN_002",  
+  "name": "Structured_JSON_Logging",  
+  "version": "1.0",  
+  "category": "LOGGING",  
+  "input_schema": "execution events",  
+  "output_schema": "JSON logs with trace_id and span_id",  
+  "invariants": [  
+	"schema consistency across all logs",  
+	"mandatory fields present",  
+	"single terminal event"  
+  ],  
+  "usage_example": "pipeline observability and debugging",  
+  "dependencies": [],  
+  "deterministic": true  
+}
+```
 
-	```json	
-	{  
-	  "pattern_id": "PATTERN_003",  
-	  "name": "Fail_Fast_Validation_Gate",  
-	  "version": "1.0",  
-	  "category": "VALIDATION",  
-	  "input_schema": "precondition checks",  
-	  "output_schema": "immediate termination on violation",  
-	  "invariants": [  
-	    "no fallback logic",  
-	    "explicit error emission",  
-	    "halt on first failure"  
-	  ],  
-	  "usage_example": "input validation and state enforcement",  
-	  "dependencies": [],  
-	  "deterministic": true  
-	}
-	```
+```json	
+{  
+  "pattern_id": "PATTERN_003",  
+  "name": "Fail_Fast_Validation_Gate",  
+  "version": "1.0",  
+  "category": "VALIDATION",  
+  "input_schema": "precondition checks",  
+  "output_schema": "immediate termination on violation",  
+  "invariants": [  
+	"no fallback logic",  
+	"explicit error emission",  
+	"halt on first failure"  
+  ],  
+  "usage_example": "input validation and state enforcement",  
+  "dependencies": [],  
+  "deterministic": true  
+}
 ```
 
 ---
