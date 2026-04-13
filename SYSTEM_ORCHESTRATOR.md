@@ -837,9 +837,10 @@ RATIONALE (ENFORCED)
 ---
 
 ## 🌐 SEARCH_VALIDATION_RULE
-```
+
 TRIGGER (MANDATORY EXECUTION MODE)
 
+```python
 from openai import OpenAI
 client = OpenAI()
 
@@ -848,18 +849,16 @@ response = client.responses.create(
     tools=[{"type": "web_search"}],
     input="<[Use current web sources and cite them to execute OUTPUT of current STATE XX.]>"
 )
-
+```
 - When this section is present, the system MUST operate in **live retrieval mode**
 - All outputs MUST be grounded in **externally retrieved, up-to-date data**
 
  TOOL EXECUTION CONTRACT (HARD REQUIREMENT)
 1. **MANDATORY TOOL INVOCATION**
     - MUST execute `web.run` using:
-
-	    ```
-        slow|<query>
-        ```
-
+	```
+	slow|<query>
+	```
     - Tool call MUST occur **before any reasoning or output**
     - No cached, assumed, or prior knowledge allowed
 
@@ -930,7 +929,6 @@ RATIONALE (ENFORCED)
     - currency
     - verifiability
 Structured observability and logging systems depend on accurate, queryable external data sources
-```
 
 ---
 
