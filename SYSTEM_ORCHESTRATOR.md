@@ -776,7 +776,6 @@ RATIONALE (ENFORCED)
     - enables system-wide consistency
 
 **RECORDED REUSABLE_PATTERNS (SCHEMA-COMPLIANT):**
-
 ```json
 {  
   "pattern_id": "PATTERN_001",  
@@ -1462,7 +1461,7 @@ RATIONALE (ENFORCED)
 "version": "1.0"
 }
 
-```
+---
 
 {
 "test_id": "T1",
