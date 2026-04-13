@@ -2163,14 +2163,10 @@ VALIDATE:
 1. functional correctness (bugs)
 2. edge case coverage
 3. compliance with system rules (determinism, fail-fast, I/O contracts)
-
 IF any violation detected:
     HALT
 
----
-
 STRUCTURAL QUALITY CHECKS:
-
 - Reject:
   - hidden assumptions
   - fragile constructs (e.g., excessive regex dependence)
@@ -2180,103 +2176,73 @@ STRUCTURAL QUALITY CHECKS:
   - readability and explicit control flow
   - minimal, declared dependencies
 
----
-
 SAFETY GATE:
-
 - Confirm:
   - no undefined behavior paths
   - alignment with pipeline architecture
-
 IF safety cannot be proven:
     HALT
 
 RATIONALE:
-
 Structured code reviews improve reliability, maintainability, and early defect detection in controlled pipelines
-```
 
 ---
+
 ## TEST_VALIDATION_LOGIC_SIMULATION_RULES
-```
+
 EXECUTION SIMULATION PROTOCOL:
-
 SIMULATE deterministic execution path
-
 VERIFY:
-
 - exact output match (valid cases)
 - correct failure behavior (invalid/edge cases)
 - error messages and logging outputs
-
 IF any mismatch:
     HALT
-
 CONFIRMATION REQUIRED: YES
-
----
-
 ASSERTION ENFORCEMENT:
-
 - All validations must be explicit (no implicit correctness)
 - Fail on first discrepancy (no continuation)
 
----
-
 CONSISTENCY REQUIREMENT:
-
 - Ensure:
   - deterministic results across runs
   - no state leakage or variability
 
 RATIONALE:
-
 Deterministic validation prevents flaky behavior and ensures reproducible test outcomes
-```
 
 ---
+
 ## OUTPUT_CONFIRMATION_RULES
-```
+
 OUTPUT VALIDATION PROTOCOL:
-
 VERIFY:
-
 - format compliance (schema + structure)
 - completeness (no missing fields or records)
 - exact record count alignment with expected input
-
 IF any deviation detected:
     HALT
-
 CONFIRMATION REQUIRED: YES
 
----
-
 INTEGRITY ENFORCEMENT:
-
 - Reject:
   - partial outputs
   - truncated data
   - extra/unexpected records
 
----
-
 FINAL CONSISTENCY CHECK:
-
 - Ensure output is:
   - fully deterministic
   - traceable to input and transformation steps
 
 RATIONALE:
-
 Strict output validation guarantees pipeline integrity and prevents propagation of corrupted results
-```
 
 ---
-## BUG_LOGGING_RULES
-```
-BUG CAPTURE PROTOCOL:
 
+## BUG_LOGGING_RULES
+
+BUG CAPTURE PROTOCOL:
 IF a bug or invariant violation is detected:
 - Emit a **structured JSON log event (ERROR level)**
 - Do not log free-text or stack traces without structure
@@ -2285,34 +2251,32 @@ IF a bug or invariant violation is detected:
 REQUIRED BUG SCHEMA
 Structured logs must be consistent, machine-readable, and enriched with context to support debugging and automation.
 Each bug log MUST include:
-
-	```json
-	{
-	  "timestamp": "ISO-8601 UTC",
-	  "level": "ERROR",
-	  "service": "<script_name>",
-	  "trace_id": "...",
-	  "span_id": "...",
-	  "error_code": "...",
-	  "message": "...",
-	  "root_cause": "...",
-	  "fix_suggestion": "...",
-	  "stage": "INIT|VALIDATED|PROCESSING|COMPLETED|FAILED",
-	  "context": {
-	    "file": "...",
-	    "line": "...",
-	    "snippet": "...",
-	    "input": "...",
-	    "pipeline_stage": "..."
-	  },
-	  "classification": {
-	    "category": "...",
-	    "severity": "LOW|MEDIUM|HIGH|CRITICAL",
-	    "frequency": "FIRST_OCCURRENCE|RECURRING"
-	  }
-	}
-	```
-
+```json
+{
+  "timestamp": "ISO-8601 UTC",
+  "level": "ERROR",
+  "service": "<script_name>",
+  "trace_id": "...",
+  "span_id": "...",
+  "error_code": "...",
+  "message": "...",
+  "root_cause": "...",
+  "fix_suggestion": "...",
+  "stage": "INIT|VALIDATED|PROCESSING|COMPLETED|FAILED",
+  "context": {
+	"file": "...",
+	"line": "...",
+	"snippet": "...",
+	"input": "...",
+	"pipeline_stage": "..."
+  },
+  "classification": {
+	"category": "...",
+	"severity": "LOW|MEDIUM|HIGH|CRITICAL",
+	"frequency": "FIRST_OCCURRENCE|RECURRING"
+  }
+}
+```
 CONTEXT LINKING (MANDATORY)
 - Every bug must include **full execution context**:
     - script/service name
@@ -2342,7 +2306,7 @@ ENFORCEMENT RULES
     - **pattern extraction / anomaly detection**
 - Missing required fields = **invalid log (reject at runtime or CI)**
 - No unstructured error messages allowed
-    
+
 DATA-LEVEL DIAGNOSTICS
 - Capture **minimal reproducible state**:
     - offending data fragment (`snippet`)
@@ -2365,169 +2329,139 @@ RATIONALE (ENFORCED)
     - scalable observability
 
 **RECORDED BUGS (SCHEMA-COMPLIANT):**
+```json
+{  
+  "timestamp": "2026-03-22T00:00:00",  
+  "level": "ERROR",  
+  "service": "extract_parser",  
+  "trace_id": "trace-001",  
+  "span_id": "state-11",  
+  "error_code": "BUG001",  
+  "message": "Missing 'service' field in logging schema",  
+  "root_cause": "Logging implementation violated required schema contract",  
+  "fix_suggestion": "Add 'service' field to all log entries consistently",  
+  "stage": "PROCESSING",  
+  "context": {  
+	"file": "extract_parser.py",  
+	"line": "log() definition",  
+	"snippet": "entry = {timestamp, level, message}",  
+	"input": "logging call",  
+	"pipeline_stage": "execution"  
+  },  
+  "classification": {  
+	"category": "SCHEMA_VIOLATION",  
+	"severity": "HIGH",  
+	"frequency": "FIRST_OCCURRENCE"  
+  }  
+}
+```
 
-	```json
-	{  
-	  "timestamp": "2026-03-22T00:00:00",  
-	  "level": "ERROR",  
-	  "service": "extract_parser",  
-	  "trace_id": "trace-001",  
-	  "span_id": "state-11",  
-	  "error_code": "BUG001",  
-	  "message": "Missing 'service' field in logging schema",  
-	  "root_cause": "Logging implementation violated required schema contract",  
-	  "fix_suggestion": "Add 'service' field to all log entries consistently",  
-	  "stage": "PROCESSING",  
-	  "context": {  
-	    "file": "extract_parser.py",  
-	    "line": "log() definition",  
-	    "snippet": "entry = {timestamp, level, message}",  
-	    "input": "logging call",  
-	    "pipeline_stage": "execution"  
-	  },  
-	  "classification": {  
-	    "category": "SCHEMA_VIOLATION",  
-	    "severity": "HIGH",  
-	    "frequency": "FIRST_OCCURRENCE"  
-	  }  
-	}
-	```
-	
-	```json
-	{  
-	  "timestamp": "2026-03-22T00:00:01",  
-	  "level": "ERROR",  
-	  "service": "extract_parser",  
-	  "trace_id": "trace-002",  
-	  "span_id": "state-13",  
-	  "error_code": "BUG002",  
-	  "message": "Missing lifecycle stage logs (PROCESSING)",  
-	  "root_cause": "Incomplete lifecycle implementation",  
-	  "fix_suggestion": "Add INIT → VALIDATED → PROCESSING → COMPLETED logs",  
-	  "stage": "VALIDATED",  
-	  "context": {  
-	    "file": "extract_parser.py",  
-	    "line": "main loop",  
-	    "snippet": "no PROCESSING log emitted",  
-	    "input": "runtime execution",  
-	    "pipeline_stage": "processing"  
-	  },  
-	  "classification": {  
-	    "category": "STATE_VIOLATION",  
-	    "severity": "MEDIUM",  
-	    "frequency": "FIRST_OCCURRENCE"  
-	  }  
-	}
-	```
-	
-	```json
-	{  
-	  "timestamp": "2026-03-22T00:00:02",  
-	  "level": "ERROR",  
-	  "service": "extract_parser",  
-	  "trace_id": "trace-003",  
-	  "span_id": "state-13",  
-	  "error_code": "BUG003",  
-	  "message": "Missing progress tracking fields",  
-	  "root_cause": "Execution observability requirements not implemented",  
-	  "fix_suggestion": "Add progress_percent, current_step, total_steps",  
-	  "stage": "PROCESSING",  
-	  "context": {  
-	    "file": "extract_parser.py",  
-	    "line": "loop iteration",  
-	    "snippet": "no progress fields",  
-	    "input": "line processing",  
-	    "pipeline_stage": "processing"  
-	  },  
-	  "classification": {  
-	    "category": "OBSERVABILITY_GAP",  
-	    "severity": "MEDIUM",  
-	    "frequency": "FIRST_OCCURRENCE"  
-	  }  
-	}
-	```
+```json
+{  
+  "timestamp": "2026-03-22T00:00:01",  
+  "level": "ERROR",  
+  "service": "extract_parser",  
+  "trace_id": "trace-002",  
+  "span_id": "state-13",  
+  "error_code": "BUG002",  
+  "message": "Missing lifecycle stage logs (PROCESSING)",  
+  "root_cause": "Incomplete lifecycle implementation",  
+  "fix_suggestion": "Add INIT → VALIDATED → PROCESSING → COMPLETED logs",  
+  "stage": "VALIDATED",  
+  "context": {  
+	"file": "extract_parser.py",  
+	"line": "main loop",  
+	"snippet": "no PROCESSING log emitted",  
+	"input": "runtime execution",  
+	"pipeline_stage": "processing"  
+  },  
+  "classification": {  
+	"category": "STATE_VIOLATION",  
+	"severity": "MEDIUM",  
+	"frequency": "FIRST_OCCURRENCE"  
+  }  
+}
+```
+
+```json
+{  
+  "timestamp": "2026-03-22T00:00:02",  
+  "level": "ERROR",  
+  "service": "extract_parser",  
+  "trace_id": "trace-003",  
+  "span_id": "state-13",  
+  "error_code": "BUG003",  
+  "message": "Missing progress tracking fields",  
+  "root_cause": "Execution observability requirements not implemented",  
+  "fix_suggestion": "Add progress_percent, current_step, total_steps",  
+  "stage": "PROCESSING",  
+  "context": {  
+	"file": "extract_parser.py",  
+	"line": "loop iteration",  
+	"snippet": "no progress fields",  
+	"input": "line processing",  
+	"pipeline_stage": "processing"  
+  },  
+  "classification": {  
+	"category": "OBSERVABILITY_GAP",  
+	"severity": "MEDIUM",  
+	"frequency": "FIRST_OCCURRENCE"  
+  }  
+}
 ```
 
 ---
+
 ## EXECUTION_INSTRUCTIONS_RULES
-```
+
 EXECUTION INSTRUCTION PROTOCOL:
-
 REQUIRE explicit definition of:
-
 - execution command (exact syntax)
 - input specification (type, path, schema)
 - output specification (type, path, format)
 - failure scenarios (trigger → outcome)
-
 IF any element missing OR ambiguous:
     HALT
 
----
-
 ENVIRONMENT CONTRACT:
-
 DEFINE:
-
 - OS compatibility (must match declared environment)
 - editor/runtime constraints
 - dependency set (versions + installation method)
-
 ENFORCE:
-
 - No undeclared dependencies
 - Full environment reproducibility (same setup → same result)
 
----
-
 EXECUTION FLOW:
-
 - Provide ordered steps (no implicit actions)
 - Each step must be independently executable and verifiable
 
 DEFINE CHECKPOINTS:
-
 - Identify observable validation points per stage
 - Each checkpoint must confirm:
   - state correctness
   - expected intermediate output
-
 (Checkpoints improve early defect detection and execution reliability)
 
----
-
 LOGGING & DIAGNOSTICS:
-
 - Define expected logs per stage (INFO / ERROR)
 - Include log interpretation guidance:
   - success indicators
   - failure signatures
-
 - Logs must be structured and traceable for debugging
 
----
-
 FAILURE CONTRACT:
-
 FOR EACH failure scenario:
-
 - Define:
   - trigger condition
   - exact error message
   - termination behavior
-
 - No recovery or fallback allowed
 
----
-
 REPRODUCIBILITY GUARANTEE:
-
 - Instructions must produce identical results across executions
 - All steps, dependencies, and configurations must be fully specified
-
 (Consistent environments eliminate execution drift and “works on my machine” issues)
 
 RATIONALE:
-
 Explicit, environment-bound execution instructions with checkpoints and structured logging ensure deterministic, traceable, and reproducible pipeline execution
-```
