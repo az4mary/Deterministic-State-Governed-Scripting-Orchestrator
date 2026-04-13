@@ -1611,9 +1611,8 @@ Atomic pipeline stages improve testability, reuse, and failure isolation
 ---
 
 ## SCRIPT_CATEGORIES
-```
-SCRIPT ROLE MODEL (STRICT BOUNDARY ENFORCEMENT)
 
+SCRIPT ROLE MODEL (STRICT BOUNDARY ENFORCEMENT)
 Each script MUST implement **exactly one bounded responsibility**:
 - `PARSER` → extract structured data from defined inputs
 - `SCRAPER` → acquire external data (API/web ingestion)
@@ -1624,20 +1623,18 @@ Modern architectures require clear module boundaries to ensure independence and 
 
 INTERFACE CONTRACT (MANDATORY)
 Each script MUST declare:
-
-	```json
-	{  
-	  "script_id": "...",  
-	  "category": "PARSER|SCRAPER|PROCESSOR",  
-	  "version": "...",  
-	  "input_schema": "...",  
-	  "output_schema": "...",  
-	  "dependencies": [],  
-	  "required external libraries": [],  
-	  "deterministic": true  
-	}
-	```
-
+```json
+{  
+  "script_id": "...",  
+  "category": "PARSER|SCRAPER|PROCESSOR",  
+  "version": "...",  
+  "input_schema": "...",  
+  "output_schema": "...",  
+  "dependencies": [],  
+  "required external libraries": [],  
+  "deterministic": true  
+}
+```
 - Inputs/outputs must be:
     - explicitly typed
     - schema-validated
@@ -1647,10 +1644,9 @@ Each script MUST declare:
 DEPENDENCY GRAPH (EXPLICIT PIPELINE MODEL)
 
 - All scripts must be connected via a **directed acyclic graph (DAG)**:
-	```
-	script_A → script_B → script_C
-	```
-
+```
+script_A → script_B → script_C
+```
 - Each script MUST declare:
     - upstream dependencies
     - downstream consumers
@@ -1706,29 +1702,27 @@ RATIONALE (ENFORCED)
 Modular, observable architectures are foundational for modern scalable systems
 
 **RECORDED SCRIPTS (SCHEMA-COMPLIANT):**
-
-	```json
-	{
-	  "script_id": "SCRIPT_001",
-	  "name": "extract_parser",
-	  "version": "4.0",
-	  "category": "PARSER",
-	  "input_schema": "markdown-like file with '# TITLE' followed by '**TASK:** text'",
-	  "output_schema": "clean TITLE-TASK pairs with single spacing",
-	  "dependencies": [],
-	  "required_external_libraries": [],
-	  "deterministic": true,
-	  "upstream": null,
-	  "downstream": null,
-	  "pipeline_stage": "extraction",
-	  "execution_model": "single-pass FSM parser",
-	  "observability": {
-	    "logging": "structured JSON",
-	    "trace_fields": ["trace_id", "span_id"],
-	    "lifecycle": ["INIT", "VALIDATED", "PROCESSING", "COMPLETED"]
-	  }
-	}
-	```
+```json
+{
+  "script_id": "SCRIPT_001",
+  "name": "extract_parser",
+  "version": "4.0",
+  "category": "PARSER",
+  "input_schema": "markdown-like file with '# TITLE' followed by '**TASK:** text'",
+  "output_schema": "clean TITLE-TASK pairs with single spacing",
+  "dependencies": [],
+  "required_external_libraries": [],
+  "deterministic": true,
+  "upstream": null,
+  "downstream": null,
+  "pipeline_stage": "extraction",
+  "execution_model": "single-pass FSM parser",
+  "observability": {
+	"logging": "structured JSON",
+	"trace_fields": ["trace_id", "span_id"],
+	"lifecycle": ["INIT", "VALIDATED", "PROCESSING", "COMPLETED"]
+  }
+}
 ```
 
 ---
