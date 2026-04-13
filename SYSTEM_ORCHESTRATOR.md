@@ -1581,32 +1581,27 @@ RATIONALE (ENFORCED)
 ---
 
 ## PROJECT_ARCHITECTURE
-```
+
 SYSTEM MODEL: Deterministic File Processing Pipeline (Python Language)
 
 PIPELINE STAGES:
-
 1. Ingestion → Markdown inputs
 2. Extraction → Structured parsing
 3. Transformation → Data normalization / enrichment
 4. Output → Persisted results
 
 ARCHITECTURE CONSTRAINTS:
-
 - Each stage is atomic and single-responsibility
 - Data flows linearly (no implicit branching)
 - Interfaces between stages are explicitly defined
 
 REQUIREMENTS:
-
 - Define component boundaries and dependencies
 - Map data flow across pipeline stages
 - Ensure full traceability from input → output
 
 RATIONALE:
-
 Atomic pipeline stages improve testability, reuse, and failure isolation
-```
 
 ---
 
@@ -1642,7 +1637,6 @@ Each script MUST declare:
 - No implicit inputs (e.g., global state, hidden files)
 
 DEPENDENCY GRAPH (EXPLICIT PIPELINE MODEL)
-
 - All scripts must be connected via a **directed acyclic graph (DAG)**:
 ```
 script_A → script_B → script_C
@@ -1750,39 +1744,33 @@ Modular, observable architectures are foundational for modern scalable systems
 ---
 
 ## ENVIRONMENT
-```
-RUNTIME SPECIFICATION:
 
+RUNTIME SPECIFICATION:
 - OS: Windows 11 (x64)
 - Language: Python
 - Editor: Notepad
 - Workspace: Obsidian Vault
 
 CONSTRAINTS:
-
 - No assumptions beyond defined environment
 - Scripts must be compatible with local filesystem execution
 - No reliance on undeclared dependencies or tools
 
 ENFORCEMENT:
-
 - All execution instructions must align with this environment
 - Any deviation requires explicit validation
 
 RATIONALE:
-
 Deterministic systems require fixed execution environments to ensure reproducibility
-```
 
 ---
 
 ## VAULT_STRUCTURE
-```
+
 ROOT:
 C:\Users\HP\Documents\Obsidian\test\PROJECTS\
 
 DIRECTORY MODEL:
-
 - data/        → raw inputs (ingestion stage)
 - scripts/     → executable logic (processing layer)
 - output/      → processed results (final stage)
@@ -1790,20 +1778,16 @@ DIRECTORY MODEL:
 - PYTHON SCRIPTS/      → core reusable modules (optional separation)
 
 CONSTRAINTS:
-
 - Folder roles must map directly to pipeline stages
 - No ambiguous or overlapping responsibilities
 - File paths must be explicitly defined in I/O rules
 
 ENFORCEMENT:
-
 - All scripts must reference absolute or validated relative paths
 - Data flow must follow: data → scripts → output
 
 RATIONALE:
-
 Clear directory-to-pipeline mapping ensures traceability and reduces coupling in workflow systems
-```
 
 ---
 
