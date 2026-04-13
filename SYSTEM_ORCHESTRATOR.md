@@ -1947,6 +1947,37 @@ RATIONALE (ENFORCED)
 
 ---
 
+## SCRIPT_EDIT_RULES
+
+### ✅ Recommended Approach: Controlled Find & Replace Patching
+**Do NOT regenerate 700+ lines.**
+Instead use **targeted patching**:
+#### Why this is correct
+* Large file rewrites are error-prone and non-deterministic
+* Incremental patching preserves stability
+* Industry tools support this model with **dry-run + validation** ([PyPI][1])
+
+#### Core Strategy
+1. **Identify atomic violations** (from STATE 11)
+2. Convert each into:
+   ```
+   FIND: <exact snippet>
+   REPLACE: <corrected snippet>
+   ```
+3. Apply **one patch at a time**
+4. Validate after each patch (no batch changes)
+
+#### Critical Safeguards
+* Use **dry-run before applying changes** ([PyPI][1])
+* Never load full file into memory → patch line-by-line if needed ([Python For All][2])
+* Write to temp file → rename (prevents corruption) ([Stack Overflow][3])
+
+[1]: https://pypi.org/project/find-replace-cli/?utm_source=chatgpt.com "find-replace-cli · PyPI"
+[2]: https://www.pythonforall.com/python/filehandling/fbest?utm_source=chatgpt.com "File Handling Best Practices in Python | PythonForAll"
+[3]: https://stackoverflow.com/questions/3800086/optimizing-find-and-replace-over-large-files-in-python?utm_source=chatgpt.com "optimization - Optimizing find and replace over large files in Python - Stack Overflow"
+
+---
+
 ## KB_UPDATE_RULES
 
 UPDATE MODEL (IMMUTABLE, APPEND-ONLY)
