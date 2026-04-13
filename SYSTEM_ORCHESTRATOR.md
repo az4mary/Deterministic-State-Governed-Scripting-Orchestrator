@@ -1724,6 +1724,28 @@ Modular, observable architectures are foundational for modern scalable systems
   }
 }
 ```
+```json
+{
+  "script_id": "SCRIPT_002",
+  "name": "workflow_state_manager",
+  "version": "1.0",
+  "category": "PROCESSOR",
+  "input_schema": "validated structured prompt outputs",
+  "output_schema": "updated workflow_state.json",
+  "dependencies": ["SCRIPT_001"],
+  "required_external_libraries": [],
+  "deterministic": true,
+  "upstream": null,
+  "downstream": null,
+  "pipeline_stage": "TRANSFORMATION",
+  "execution_model": "schema-validated state persistence",
+  "observability": {
+	"logging": "structured JSON",
+	"trace_fields": ["trace_id", "span_id"],
+	"lifecycle": ["INIT", "VALIDATED", "PROCESSING", "COMPLETED"]
+  }
+}
+```
 
 ---
 
