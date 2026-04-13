@@ -1460,9 +1460,8 @@ RATIONALE (ENFORCED)
 },
 "version": "1.0"
 }
-
----
-
+```
+```
 {
 "test_id": "T1",
 "name": "Valid raw inputs produce schema-compliant workflow state",
