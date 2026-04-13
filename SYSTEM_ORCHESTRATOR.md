@@ -1874,7 +1874,7 @@ RATIONALE (ENFORCED)
 ---
 
 ## SCRIPT_EXECUTION_RULES
-```
+
 1. EXECUTION REQUIREMENTS
 	- Validate all inputs using **strict schema enforcement** (type, format, constraints)
 	- ISO timestamps are a logging best practice for consistency
@@ -1903,15 +1903,15 @@ RATIONALE (ENFORCED)
 	- Model execution as a **traceable lifecycle**:
 	    - `INIT → VALIDATED → PROCESSING → COMPLETED | FAILED`
 	- Emit a **structured log event at every stage transition**:
-		```json
-		{
-		  "level": "INFO",
-		  "stage": "PROCESSING",
-		  "status": "STARTED",
-		  "trace_id": "...",
-		  "timestamp": "..."
-		}
-		```
+	```json
+	{
+	  "level": "INFO",
+	  "stage": "PROCESSING",
+	  "status": "STARTED",
+	  "trace_id": "...",
+	  "timestamp": "..."
+	}
+	```
 	- Implement **distributed tracing correlation**:
 	    - Every event must include `trace_id` and `span_id`
 	    - Maintain continuity across all steps
@@ -1919,15 +1919,15 @@ RATIONALE (ENFORCED)
 	    - Fields: `progress_percent`, `current_step`, `total_steps`
 	    - Must be monotonic and consistent
 	- Emit exactly **one terminal event**:
-		```json
-		{
-		  "level": "INFO",
-		  "status": "SUCCESS",
-		  "duration_ms": 1234,
-		  "trace_id": "...",
-		  "output_hash": "..."
-		}
-		```
+	```json
+	{
+	  "level": "INFO",
+	  "status": "SUCCESS",
+	  "duration_ms": 1234,
+	  "trace_id": "...",
+	  "output_hash": "..."
+	}
+	```
 	- Ensure **log–trace alignment**:
 	    - Logs must map to execution flow for full observability
 	    - Enables end-to-end debugging and root cause isolation
@@ -1944,12 +1944,11 @@ RATIONALE (ENFORCED)
 3. STRUCTURAL CONSISTENCY RULE
 	- **All logs must follow a single schema contract**
 	- No field drift or naming variation
-```
 
 ---
 
 ## KB_UPDATE_RULES
-```
+
 UPDATE MODEL (IMMUTABLE, APPEND-ONLY)
 
 - Knowledge Base (KB) MUST operate as an **append-only, immutable log**
@@ -1966,29 +1965,27 @@ A new KB entry MUST be created only when:
 
 ENTRY SCHEMA (MANDATORY)
 Each KB update MUST conform to a **structured schema**:
-
-	```json
-	{  
-	  "entry_id": "...",  
-	  "timestamp": "ISO-8601 UTC",  
-	  "version": "...",  
-	  "change_type": "LOGIC|PATTERN|ARCHITECTURE",  
-	  "change_summary": "...",  
-	  "reason": "...",  
-	  "impact": {  
-	    "previous_behavior": "...",  
-	    "new_behavior": "...",  
-	    "breaking_change": true|false  
-	  },  
-	  "linked_artifacts": {  
-	    "scripts": ["script_id@version"],  
-	    "patterns": ["pattern_id@version"]  
-	  },  
-	  "trace_id": "...",  
-	  "author": "system|user"  
-	}
-	```
-
+```json
+{  
+  "entry_id": "...",  
+  "timestamp": "ISO-8601 UTC",  
+  "version": "...",  
+  "change_type": "LOGIC|PATTERN|ARCHITECTURE",  
+  "change_summary": "...",  
+  "reason": "...",  
+  "impact": {  
+	"previous_behavior": "...",  
+	"new_behavior": "...",  
+	"breaking_change": true|false  
+  },  
+  "linked_artifacts": {  
+	"scripts": ["script_id@version"],  
+	"patterns": ["pattern_id@version"]  
+  },  
+  "trace_id": "...",  
+  "author": "system|user"  
+}
+```
 - Must be **machine-readable and schema-consistent**
 - Must support **programmatic querying and diffing**
 
@@ -2046,32 +2043,30 @@ RATIONALE (ENFORCED)
 Immutable event histories enable debugging, replay, and full system understanding
 
 **RECORDED KB NEW ENTRY (SCHEMA-COMPLIANT)**
-
-	```json
-	{
-	  "entry_id": "KB_001",
-	  "timestamp": "2026-03-22T00:00:00Z",
-	  "version": "1.0",
-	  "change_type": "ARCHITECTURE",
-	  "change_summary": "Implemented deterministic FSM-based parser with structured logging and
-	   lifecycle enforcement",
-	  "reason": "Initial implementation lacked full schema-compliant logging, lifecycle tracking,
-	   and observability guarantees",
-	  "impact": {
-	    "previous_behavior": "Partial logging, missing lifecycle stages, incomplete
-	     observability",
-	    "new_behavior": "Full JSON logging schema, INIT→VALIDATED→PROCESSING→COMPLETED lifecycle,
-	     deterministic execution with traceability",
-	    "breaking_change": false
-	  },
-	  "linked_artifacts": {
-	    "scripts": ["SCRIPT_001@4.0"],
-	    "patterns": ["PATTERN_001@1.0", "PATTERN_002@1.0", "PATTERN_003@1.0"]
-	  },
-	  "trace_id": "trace-kb-001",
-	  "author": "system"
-	}
-	```
+```json
+{
+  "entry_id": "KB_001",
+  "timestamp": "2026-03-22T00:00:00Z",
+  "version": "1.0",
+  "change_type": "ARCHITECTURE",
+  "change_summary": "Implemented deterministic FSM-based parser with structured logging and
+   lifecycle enforcement",
+  "reason": "Initial implementation lacked full schema-compliant logging, lifecycle tracking,
+   and observability guarantees",
+  "impact": {
+	"previous_behavior": "Partial logging, missing lifecycle stages, incomplete
+	 observability",
+	"new_behavior": "Full JSON logging schema, INIT→VALIDATED→PROCESSING→COMPLETED lifecycle,
+	 deterministic execution with traceability",
+	"breaking_change": false
+  },
+  "linked_artifacts": {
+	"scripts": ["SCRIPT_001@4.0"],
+	"patterns": ["PATTERN_001@1.0", "PATTERN_002@1.0", "PATTERN_003@1.0"]
+  },
+  "trace_id": "trace-kb-001",
+  "author": "system"
+}
 ```
 
 ---
