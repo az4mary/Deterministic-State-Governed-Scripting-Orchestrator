@@ -1808,25 +1808,22 @@ Clear directory-to-pipeline mapping ensures traceability and reduces coupling in
 ---
 
 ## SCRIPT_RULES
-```
+
 SCRIPT CONTRACT (METADATA — REQUIRED)
-
 Each script MUST declare a **schema-defined metadata header**:
-
-	```json
-	{  
-	  "script_id": "...",  
-	  "name": "...",  
-	  "version": "...",  
-	  "category": "PARSER|SCRAPER|PROCESSOR",  
-	  "input_schema": "...",  
-	  "output_schema": "...",  
-	  "dependencies": [],  
-	  "external_libraries": [],  
-	  "status": "ACTIVE|DEPRECATED"  
-	}
-	```
-
+```json
+{  
+  "script_id": "...",  
+  "name": "...",  
+  "version": "...",  
+  "category": "PARSER|SCRAPER|PROCESSOR",  
+  "input_schema": "...",  
+  "output_schema": "...",  
+  "dependencies": [],  
+  "external_libraries": [],  
+  "status": "ACTIVE|DEPRECATED"  
+}
+```
 - Metadata must be **machine-readable and version-controlled**
 - No implicit inputs, outputs, or dependencies
 Consistent schemas across systems are required for queryability and automation
@@ -1889,7 +1886,6 @@ RATIONALE (ENFORCED)
     - interoperability
     - maintainability
     - large-scale automation
-```
 
 ---
 
